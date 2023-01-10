@@ -45,7 +45,7 @@ class TicketController extends Controller
             'enter_at' => Carbon::now(),
         ]);
 
-        return redirect()->route('ticket.index');
+        return redirect()->route('ticket.index')->with('ticket', $ticket);
     }
 
     public function finish(Request $request, Ticket $ticket)
@@ -72,7 +72,8 @@ class TicketController extends Controller
         $exitAt = new Carbon($ticket->exitAt);
 
         $totalHour = $exitAt->diffInHours($enterAt);
-        $totalPrice = ($totalHour - 1) * $ticket->rate->price_per_hour + $ticket->rate->base_price;
+
+        $totalPrice = ($totalHour + 1) * $ticket->rate->price_per_hour + $ticket->rate->base_price;
         
         $ticket->status = 'Selesai';
         $ticket->total_hour = $totalHour;

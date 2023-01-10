@@ -5,6 +5,12 @@
 @section('content')
 <div class="page-content flex-grow-1">
   <section class="row">
+    <div class="col-lg-12">
+      @if (session('ticket'))
+        {{ session('ticket') }}
+      @endif
+    </div>
+
     <div class="col-lg-6">
       <div class="card">
         <div class="card-header pb-0">
@@ -71,7 +77,7 @@
                 >
               </div>
   
-              <button class="btn btn-primary">Simpan</button>
+              <button class="btn btn-primary">Proses</button>
             </form>
           </div>
         </div>
@@ -100,7 +106,7 @@
                   <table class="table table-lg">
                     <thead>
                       <tr>
-                        <th>No.</th>
+                        <th>Kode</th>
                         <th>Plat Nomor</th>
                         <th>Jenis</th>
                         <th>Lama Parkir</th>
@@ -113,11 +119,11 @@
                     <tbody>
                       @foreach ($tickets['active'] as $ticket)
                       <tr>
-                        <td>{{ $loop->count - $loop->index }}</td>
+                        <td>{{ $ticket->code }}</td>
                         <td class="text-bold-500">{{ $ticket->plate_number }}</td>
                         <td>{{ $ticket->rate->type }}</td>
                         <td>{{ $ticket->total_hour ?? '-' }}</td>
-                        <td>{{ $ticket->total_price ?? '-' }}</td>
+                        <td>@rupiah($ticket->total_price)</td>
                         <td>{{ $ticket->enter_at }}</td>
                         <td>{{ $ticket->exit_at ?? '-' }}</td>
                         <td class="text-bold-500">
@@ -134,7 +140,7 @@
                   <table class="table table-lg">
                     <thead>
                       <tr>
-                        <th>No.</th>
+                        <th>Kode</th>
                         <th>Plat Nomor</th>
                         <th>Jenis</th>
                         <th>Lama Parkir</th>
@@ -150,8 +156,8 @@
                         <td>{{ $loop->count - $loop->index }}</td>
                         <td class="text-bold-500">{{ $ticket->plate_number }}</td>
                         <td>{{ $ticket->rate->type }}</td>
-                        <td>{{ $ticket->total_price ?? '-' }}</td>
-                        <td>{{ $ticket->total_hour ?? '-' }}</td>
+                        <td>{{ $ticket->total_hour ?? '-' }} Jam</td>
+                        <td>@rupiah($ticket->total_price)</td>
                         <td>{{ $ticket->enter_at }}</td>
                         <td>{{ $ticket->exit_at ?? '-' }}</td>
                         <td class="text-bold-500">
