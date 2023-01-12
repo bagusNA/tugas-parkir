@@ -42,7 +42,7 @@ class TicketController extends Controller
         $ticket = Ticket::create([
             'employee_id' => Auth::user()->id,
             'rate_id' => $rate->id,
-            'enter_at' => Carbon::now(),
+            'enter_at' => Carbon::now('Asia/Singapore'),
         ]);
 
         $scanCode = ActiveCode::create([

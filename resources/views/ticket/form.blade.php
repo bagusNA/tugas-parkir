@@ -34,6 +34,7 @@
         background: #fff;
         padding: .5rem;
         border-radius: 10px;
+        height: 35vh;
       }
     </style>
   </head>
@@ -61,7 +62,7 @@
           <div id="auth-right">
             <div class="auth-grid">
               <div class="webcam-wrapper">
-                <video src="" id="webcam" class="h-100"></video>
+                <video src="" id="webcam" class=""></video>
                 {{-- <canvas id="canvas"></canvas>
                 <img src="" alt="" id="picture"> --}}
               </div>
