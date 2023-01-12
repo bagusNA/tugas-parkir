@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
 class Ticket extends Model
 {
@@ -25,6 +29,11 @@ class Ticket extends Model
         return $this->belongsTo(Rate::class);
     }
 
+    public function scanCode(): HasOne
+    {
+        return $this->hasOne(ActiveCode::class);
+    }
+
     protected function code(): Attribute
     {
         return Attribute::make(
@@ -38,6 +47,27 @@ class Ticket extends Model
                 return "$code/$month/$year";
             }
         );
+    }
+
+    public function printTicket($code)
+    {
+        $connector = new FilePrintConnector('/dev/usb/lp0');
+        $print = new Printer($connector);
+
+        $print->setTextSize(1,1);
+        $print->text('SMKN 7 SAMARINDA');
+
+        $print->setTextSize(1,1);
+        $print->text($this->enter_at);
+        
+        $print->barcode(Str::upper($code), Printer::BARCODE_CODE39);
+        $print->feed(2);
+
+        $print->text($code);
+        $print->text('Mohon karcis jangan sampai hilang');
+        $print->text('Segala kehilangan merupakan tanggung jawab pribadi');
+        $print->cut();
+        $print->close();
     }
 
     protected function toRoman(int $number) {

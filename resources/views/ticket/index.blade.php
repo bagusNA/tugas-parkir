@@ -18,7 +18,7 @@
         </div>
         <div class="card-content">
           <div class="card-body">
-            <form action="{{ route('ticket.create') }}" method="post">
+            <form action="" method="post">
               @csrf
               <div class="form-group">
                 <label for="roundText">Plat Kendaraan</label>
@@ -119,7 +119,7 @@
                     <tbody>
                       @foreach ($tickets['active'] as $ticket)
                       <tr>
-                        <td>{{ $ticket->code }}</td>
+                        <td>{{ $ticket->scanCode->code }}</td>
                         <td class="text-bold-500">{{ $ticket->plate_number }}</td>
                         <td>{{ $ticket->rate->type }}</td>
                         <td>{{ $ticket->total_hour ?? '-' }}</td>

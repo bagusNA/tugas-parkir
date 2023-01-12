@@ -23,12 +23,18 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('auth.login.post');
 
+Route::controller(TicketController::class)->group(function () {
+    Route::get('/ticket/{rate}', 'createForm')->name('ticket.createForm');
+    Route::post('/ticket/{rate}/create', 'create')->name('ticket.create');
+});
+
 Route::middleware('auth')->prefix('/admin')->group(function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::controller(TicketController::class)->group(function () {
         Route::get('/ticket', 'index')->name('ticket.index');
-        Route::post('/ticket/create', 'create')->name('ticket.create');
+        Route::get('/ticket/finish', 'finishForm')->name('ticket.finish.form');
+        Route::post('/ticket/finish', 'finish')->name('ticket.finish.post');
         Route::post('/ticket/finish', 'finishBySearch')->name('ticket.finishBySearch');
         Route::post('/ticket/{ticket}/finish', 'finish')->name('ticket.finish');
     });

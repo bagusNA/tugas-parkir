@@ -24,17 +24,6 @@
         padding: 0 2rem;
         gap: 1rem;
       }
-
-      .webcam-wrapper {
-        display: grid;
-        place-items: center;
-      }
-
-      #webcam {
-        background: #fff;
-        padding: .5rem;
-        border-radius: 10px;
-      }
     </style>
   </head>
 
@@ -48,23 +37,34 @@
                 ><img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo"
               /></a>
             </div>
-            <h1 class="auth-title mb-5">Welcome</h1>
-            <h2 class="auth-title fs-1">{{ $rate->type }}</h2>
+            @if (session('ticket'))
+              <form action="{{ route('ticket.finish.post') }}" method="post">
+                <h1 class="auth-title mb-5">Bayar</h1>
+                <input type="text" class="form-control fs-1 mb-2" id="kode-karcis" placeholder="Total Bayar">
+                <div class="d-grid">
+                  <button class="btn btn-primary fs-1">Bayar</button>
+                </div>
+              </form>
+            @else
+              @if (session('error'))
+                <div class="alert alert-warning">
+                  {{ session('error') }}
+                </div>
+              @endif
 
-            <form action="{{ route('ticket.create', $rate->id) }}" method="POST" class="d-grid pt-5" id="form">
-              @csrf
-              <button class="btn btn-primary py-5 fs-1">Ambil Tiket</button>
-            </form>
+              <form action="" method="post">
+                <h1 class="auth-title mb-5">Cari</h1>
+                <input type="text" class="form-control fs-1 mb-2" id="kode-karcis" placeholder="Kode Karcis">
+                <div class="d-grid">
+                  <button class="btn btn-primary fs-1">Cari</button>
+                </div>
+              </form>
+            @endif
           </div>
         </div>
         <div class="col-lg-7 d-none d-lg-block">
           <div id="auth-right">
             <div class="auth-grid">
-              <div class="webcam-wrapper">
-                <video src="" id="webcam" class="h-100"></video>
-                {{-- <canvas id="canvas"></canvas>
-                <img src="" alt="" id="picture"> --}}
-              </div>
               @if (session('ticket'))
                 <div id="ticket" class="card text-center">
                   <h2>KARCIS</h2>
@@ -79,6 +79,5 @@
       </div>
     </div>
 
-    <script src="{{ asset('assets/js/ticket.js') }}"></script>
   </body>
 </html>

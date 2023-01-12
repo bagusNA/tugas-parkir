@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('employee_id');
             $table->foreignId('rate_id');
-            $table->string('plate_number');
+            $table->string('plate_number')->nullable();
             $table->dateTime('enter_at');
             $table->dateTime('exit_at')->nullable();
             $table->integer('total_hour')->nullable();
