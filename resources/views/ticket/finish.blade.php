@@ -20,9 +20,12 @@
     <style>
       .auth-grid {
         display: grid;
-        grid-template-rows: 1fr 1fr;
-        padding: 0 2rem;
-        gap: 1rem;
+        place-items: center;
+        height: 100%;
+      }
+
+      #ticket {
+        padding: 3.5rem;
       }
     </style>
   </head>
@@ -37,7 +40,7 @@
                 ><img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo"
               /></a>
             </div>
-            @if (session('ticket'))
+            @if ($ticket)
               <form action="{{ route('ticket.finish.post') }}" method="post">
                 <h1 class="auth-title mb-5">Bayar</h1>
                 <input type="text" class="form-control fs-1 mb-2" id="kode-karcis" placeholder="Total Bayar">
@@ -52,9 +55,9 @@
                 </div>
               @endif
 
-              <form action="" method="post">
+              <form action="{{ route('ticket.finish.form') }}">
                 <h1 class="auth-title mb-5">Cari</h1>
-                <input type="text" class="form-control fs-1 mb-2" id="kode-karcis" placeholder="Kode Karcis">
+                <input type="text" name="code" class="form-control fs-1 mb-2" id="kode-karcis" placeholder="Kode Karcis">
                 <div class="d-grid">
                   <button class="btn btn-primary fs-1">Cari</button>
                 </div>
@@ -65,12 +68,17 @@
         <div class="col-lg-7 d-none d-lg-block">
           <div id="auth-right">
             <div class="auth-grid">
-              @if (session('ticket'))
-                <div id="ticket" class="card text-center">
+              @if ($ticket)
+                <div id="ticket" class="card">
                   <h2>KARCIS</h2>
-                  <h4>{{ $rate->type }}</h4>
+                  <div class="form-group">
+                    <label for="disabledInput">Readonly Input</label>
+                    <input type="text" class="form-control form-control-lg" id="readonlyInput" readonly="readonly" value="You can't update me :P">
+                  </div>
+                  <h4>{{ $ticket->rate->type }}</h4>
+                  <h4>Rp. {{ $total }}</h4>
                   
-                  <h1 class="fw-bold text-uppercase">{{ session('ticket')['scanCode']['code'] }}</h1>
+                  <h1 class="fw-bold text-uppercase">{{ $ticket->scanCode->code }}</h1>
                 </div>
               @endif
             </div>

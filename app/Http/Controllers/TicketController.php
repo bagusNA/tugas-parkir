@@ -42,22 +42,34 @@ class TicketController extends Controller
         $ticket = Ticket::create([
             'employee_id' => Auth::user()->id,
             'rate_id' => $rate->id,
-            'enter_at' => Carbon::now('Asia/Singapore'),
+            'enter_at' => Carbon::now(),
         ]);
 
         $scanCode = ActiveCode::create([
-            'code' => Str::random(6),
+            'code' => Str::upper(Str::random(6)),
             'ticket_id' => $ticket->id
         ]);
 
-        // $ticket->printTicket($scanCode->code);
+        $ticket->printTicket($scanCode->code);
 
         return back()->with('ticket', $ticket->load('scanCode'));
     }
 
     public function finishForm(Request $request)
     {
-        return view('ticket.finish');
+        $code = $request->query('code');
+        $ticket = null;
+        $total = 0;
+
+        if ($code) {
+            $ticket = ActiveCode::firstWhere('code', $code)->ticket->load(['rate', 'scanCode']);
+            $total = $ticket->getTotal();
+        }
+
+        return view('ticket.finish', [
+            'ticket' => $ticket,
+            'total' => $total,
+        ]);
     }
 
     public function finish(Request $request)

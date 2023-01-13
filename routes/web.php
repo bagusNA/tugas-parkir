@@ -35,7 +35,6 @@ Route::middleware('auth')->prefix('/admin')->group(function() {
         Route::get('/ticket', 'index')->name('ticket.index');
         Route::get('/ticket/finish', 'finishForm')->name('ticket.finish.form');
         Route::post('/ticket/finish', 'finish')->name('ticket.finish.post');
-        Route::post('/ticket/finish', 'finishBySearch')->name('ticket.finishBySearch');
         Route::post('/ticket/{ticket}/finish', 'finish')->name('ticket.finish');
     });
 });

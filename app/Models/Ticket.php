@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
+use Mike42\Escpos\PrintConnectors\CupsPrintConnector;
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
@@ -49,23 +50,39 @@ class Ticket extends Model
         );
     }
 
+    public function getTotal()
+    {
+        $enterAt = new Carbon($this->enter_at);
+        $exitAt = new Carbon($this->exitAt);
+
+        $totalHour = $exitAt->diffInHours($enterAt);
+
+        $totalPrice = ($totalHour) * $this->rate->price_per_hour + $this->rate->base_price;
+
+        return $totalPrice;
+    }
+
     public function printTicket($code)
     {
-        $connector = new FilePrintConnector('/dev/usb/lp0');
+        $connector = new CupsPrintConnector(env('CUPS_PRINTER', 'TM-T82-S-A'));
         $print = new Printer($connector);
 
+        $print->selectPrintMode();
         $print->setTextSize(1,1);
         $print->text('SMKN 7 SAMARINDA');
 
         $print->setTextSize(1,1);
         $print->text($this->enter_at);
+        $print->feed();
         
         $print->barcode(Str::upper($code), Printer::BARCODE_CODE39);
         $print->feed(2);
 
         $print->text($code);
-        $print->text('Mohon karcis jangan sampai hilang');
-        $print->text('Segala kehilangan merupakan tanggung jawab pribadi');
+        $print->feed();
+        $print->text('Mohon karcis jangan sampai hilang\n');
+        $print->text('Segala kehilangan merupakan tanggung jawab pribadi\n');
+        $print->feed();
         $print->cut();
         $print->close();
     }
