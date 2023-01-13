@@ -42,22 +42,25 @@
             </div>
             @if ($ticket)
               <form action="{{ route('ticket.finish.post') }}" method="post">
+                @csrf
+                <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                 <h1 class="auth-title mb-5">Bayar</h1>
-                <input type="text" class="form-control fs-1 mb-2" id="kode-karcis" placeholder="Total Bayar">
+                <input type="text" name="plate_number" class="form-control fs-1 mb-2" id="plate-number" placeholder="Plat Nomor" required>
+                <input type="text" class="form-control fs-1 mb-2" id="total_paid" name="total_paid" placeholder="Total Bayar">
                 <div class="d-grid">
                   <button class="btn btn-primary fs-1">Bayar</button>
                 </div>
               </form>
             @else
-              @if (session('error'))
+              @isset ($error)
                 <div class="alert alert-warning">
-                  {{ session('error') }}
+                  {{ $error }}
                 </div>
-              @endif
+              @endisset
 
               <form action="{{ route('ticket.finish.form') }}">
                 <h1 class="auth-title mb-5">Cari</h1>
-                <input type="text" name="code" class="form-control fs-1 mb-2" id="kode-karcis" placeholder="Kode Karcis">
+                <input type="text" name="code" class="form-control fs-1 mb-2" id="kode-karcis" placeholder="Kode Karcis" required value="{{ request()->input('code') }}">
                 <div class="d-grid">
                   <button class="btn btn-primary fs-1">Cari</button>
                 </div>

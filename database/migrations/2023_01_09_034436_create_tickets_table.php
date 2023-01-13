@@ -22,6 +22,7 @@ return new class extends Migration
             $table->dateTime('exit_at')->nullable();
             $table->integer('total_hour')->nullable();
             $table->integer('total_price')->nullable();
+            $table->integer('total_paid')->nullable();
             $table->enum('status', ['Aktif', 'Selesai'])->default('Aktif');
             $table->timestamps();
 

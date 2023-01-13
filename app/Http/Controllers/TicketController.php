@@ -57,48 +57,52 @@ class TicketController extends Controller
 
     public function finishForm(Request $request)
     {
-        $code = $request->query('code');
-        $ticket = null;
-        $total = 0;
+        $inputCode = Str::upper($request->query('code'));
+        $data = [
+            'ticket' => null,
+            'total' => 0,
+        ];
 
-        if ($code) {
-            $ticket = ActiveCode::firstWhere('code', $code)->ticket->load(['rate', 'scanCode']);
-            $total = $ticket->getTotal();
+        if ($inputCode) {
+            $code = ActiveCode::firstWhere('code', $inputCode);
+
+            if (!$code) {
+                return view('ticket.finish', $data)->with('error', 'Kode tidak ditemukan!');
+            }
+
+            $data['ticket'] = $code->ticket->load(['rate', 'scanCode']);
+            $data['total'] = $data['ticket']->getTotal();
         }
 
-        return view('ticket.finish', [
-            'ticket' => $ticket,
-            'total' => $total,
-        ]);
+        return view('ticket.finish', $data);
     }
 
     public function finish(Request $request)
     {
         $input = $request->validate([
-            'code' => 'required'
+            'ticket_id' => 'required',
+            'total_paid' => 'required',
+            'plate_number' => 'required',
         ]);
 
-        $code = ActiveCode::firstWhere('code', $input['code']);
-        if (!$code) {
-            return back()->with('error', 'Kode karcis tidak ditemukan!');
-        }
-
-        $ticket = $code->ticket;
+        $ticket = Ticket::find($input['ticket_id']);
         
         $enterAt = new Carbon($ticket->enter_at);
         $exitAt = new Carbon($ticket->exitAt);
 
-        $totalHour = $exitAt->diffInHours($enterAt);
+        $totalHour = $exitAt->diffInHours($enterAt) + 1;
 
-        $totalPrice = ($totalHour + 1) * $ticket->rate->price_per_hour + $ticket->rate->base_price;
-        
         $ticket->status = 'Selesai';
         $ticket->total_hour = $totalHour;
-        $ticket->total_price = $totalPrice;
+        $ticket->total_price = $ticket->getTotal();
+        $ticket->total_paid = $input['total_paid'];
+        $ticket->plate_number = $input['plate_number'];
         $ticket->exit_at = $exitAt;
         $ticket->save();
 
         $ticket->scanCode->delete();
+
+        return redirect()->route('ticket.finish.form')->with('success', 'Berhasil bayar parkir!');
     }
 
     public function finishBySearch(Request $request)
