@@ -72,6 +72,12 @@ class TicketController extends Controller
 
             $data['ticket'] = $code->ticket->load(['rate', 'scanCode']);
             $data['total'] = $data['ticket']->getTotal();
+
+            $enterAt = new Carbon($code->ticket->enter_at);
+            $exitAt = new Carbon($code->ticket->exitAt);
+
+            $totalHour = $exitAt->diffInHours($enterAt) + 1;
+            $data['totalHour'] = $totalHour;
         }
 
         return view('ticket.finish', $data);
@@ -120,9 +126,9 @@ class TicketController extends Controller
         $enterAt = new Carbon($ticket->enter_at);
         $exitAt = new Carbon($ticket->exitAt);
 
-        $totalHour = $exitAt->diffInHours($enterAt);
+        $totalHour = $exitAt->diffInHours($enterAt) + 1;
 
-        $totalPrice = ($totalHour + 1) * $ticket->rate->price_per_hour + $ticket->rate->base_price;
+        $totalPrice = $totalHour * $ticket->rate->price_per_hour + $ticket->rate->base_price;
         
         $ticket->status = 'Selesai';
         $ticket->total_hour = $totalHour;

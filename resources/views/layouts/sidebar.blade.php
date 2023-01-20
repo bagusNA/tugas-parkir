@@ -89,6 +89,26 @@
             <span>Karcis</span>
           </a>
         </li>
+
+        <hr>
+        <li class="sidebar-item">
+          <a href="{{ route('ticket.finish.form') }}" class="sidebar-link">
+            <i class="bi bi-grid-fill"></i>
+            <span>Loket Keluar</span>
+          </a>
+        </li>    
+
+        <hr>
+        <li class="sidebar-title">Loket Masuk</li>
+
+        @foreach ($lockets as $locket)
+        <li class="sidebar-item">
+          <a href="{{ route('ticket.createForm', $locket) }}" class="sidebar-link">
+            <i class="bi bi-grid-fill"></i>
+            <span>{{ $locket->type }}</span>
+          </a>
+        </li>    
+        @endforeach
       </ul>
     </div>
   </div>

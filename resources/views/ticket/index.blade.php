@@ -107,13 +107,13 @@
                     <thead>
                       <tr>
                         <th>Kode</th>
-                        <th>Plat Nomor</th>
+                        {{-- <th>Plat Nomor</th> --}}
                         <th>Jenis</th>
                         <th>Lama Parkir</th>
                         <th>Total</th>
                         <th>Jam Masuk</th>
-                        <th>Jam Keluar</th>
-                        <th>Aksi</th>
+                        {{-- <th>Jam Keluar</th> --}}
+                        {{-- <th>Aksi</th> --}}
                       </tr>
                     </thead>
                     <tbody>
@@ -123,12 +123,18 @@
                         <td class="text-bold-500">{{ $ticket->plate_number }}</td>
                         <td>{{ $ticket->rate->type }}</td>
                         <td>{{ $ticket->total_hour ?? '-' }}</td>
-                        <td>@rupiah($ticket->total_price)</td>
+                        <td>
+                          {{-- @if ($ticket->total_price) --}}
+                            @currentPrice($ticket->id)
+                          {{-- @else
+                            Rp. -
+                          @endif --}}
+                        </td>
                         <td>{{ $ticket->enter_at }}</td>
-                        <td>{{ $ticket->exit_at ?? '-' }}</td>
+                        {{-- <td>{{ $ticket->exit_at ?? '-' }}</td>
                         <td class="text-bold-500">
                           <button class="btn btn-primary">Selesai</button>
-                        </td>
+                        </td> --}}
                       </tr> 
                       @endforeach
                     </tbody>

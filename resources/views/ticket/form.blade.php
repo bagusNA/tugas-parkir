@@ -63,8 +63,8 @@
             <div class="auth-grid">
               <div class="webcam-wrapper">
                 <video src="" id="webcam" class=""></video>
-                {{-- <canvas id="canvas"></canvas>
-                <img src="" alt="" id="picture"> --}}
+                <canvas id="canvas"></canvas>
+                <img src="" alt="" id="photo">
               </div>
               @if (session('ticket'))
                 <div id="ticket" class="card text-center">

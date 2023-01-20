@@ -73,15 +73,13 @@
             <div class="auth-grid">
               @if ($ticket)
                 <div id="ticket" class="card">
-                  <h2>KARCIS</h2>
-                  <div class="form-group">
-                    <label for="disabledInput">Readonly Input</label>
-                    <input type="text" class="form-control form-control-lg" id="readonlyInput" readonly="readonly" value="You can't update me :P">
-                  </div>
-                  <h4>{{ $ticket->rate->type }}</h4>
-                  <h4>Rp. {{ $total }}</h4>
-                  
+                  <h2>KARCIS - {{ $ticket->rate->type }}</h2>
                   <h1 class="fw-bold text-uppercase">{{ $ticket->scanCode->code }}</h1>
+                  {{-- <p>Masuk: {{ (new Carbon($ticket->enter_at))->format("Y-m-d H:i:s") }}</p> --}}
+                  <p>Masuk: {{ $ticket->enter_at }}</p>
+                  <p>Total Jam: {{ $totalHour }} Jam</p>
+                  {{-- <p>Keluar: {{ (new Carbon($ticket->enter_at))->format("Y-m-d H:i:s") }}</p> --}}
+                  <h4>Rp. {{ $total }}</h4>
                 </div>
               @endif
             </div>
