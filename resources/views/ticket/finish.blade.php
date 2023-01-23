@@ -47,10 +47,16 @@
                 <h1 class="auth-title mb-5">Bayar</h1>
                 <input type="text" name="plate_number" class="form-control fs-1 mb-2" id="plate-number" placeholder="Plat Nomor" required>
                 <input type="text" class="form-control fs-1 mb-2" id="total_paid" name="total_paid" placeholder="Total Bayar">
+                <input type="text" class="form-control fs-1 mb-2" id="total_bill" name="total_bill" placeholder="Total" value="{{ $total }}" hidden>
                 <div class="d-grid">
-                  <button class="btn btn-primary fs-1">Bayar</button>
+                  <button id="pay_button" class="btn btn-primary fs-1">Bayar</button>
                 </div>
               </form>
+
+              <hr>
+
+              <h2>Kembalian</h2>
+              <h2>Rp. <span id="change">-</span></h2>
             @else
               @isset ($error)
                 <div class="alert alert-warning">
@@ -88,5 +94,6 @@
       </div>
     </div>
 
+    <script src="{{ asset('assets/js/finish.js') }}" defer></script>
   </body>
 </html>
