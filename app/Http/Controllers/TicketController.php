@@ -106,6 +106,8 @@ class TicketController extends Controller
         $ticket->exit_at = $exitAt;
         $ticket->save();
 
+        $ticket->printTicketOut();
+
         $ticket->scanCode->delete();
 
         return redirect()->route('ticket.finish.form')->with('success', 'Berhasil bayar parkir!');
