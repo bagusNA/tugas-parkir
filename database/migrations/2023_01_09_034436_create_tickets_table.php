@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('total_hour')->nullable();
             $table->integer('total_price')->nullable();
             $table->integer('total_paid')->nullable();
+            $table->string('image')->nullable();
             $table->enum('status', ['Aktif', 'Selesai'])->default('Aktif');
             $table->timestamps();
 

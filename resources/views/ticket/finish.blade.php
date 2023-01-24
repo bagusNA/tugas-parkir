@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Parkir Pintar</title>
+    <title>Loket Keluar - Parkir Pintar</title>
     <link rel="stylesheet" href="{{ asset('assets/css/main/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/pages/auth.css') }}" />
     <link
@@ -35,10 +35,8 @@
       <div class="row h-100">
         <div class="col-lg-5 col-12">
           <div id="auth-left">
-            <div class="auth-logo">
-              <a href="index.html"
-                ><img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo"
-              /></a>
+            <div class="auth-logo fs-1 fw-bold">
+              <a href="index.html">Parkir Pintar</a>
             </div>
             @if ($ticket)
               <form action="{{ route('ticket.finish.post') }}" method="post">

@@ -2,10 +2,8 @@
   <div class="sidebar-wrapper active">
     <div class="sidebar-header position-relative">
       <div class="d-flex justify-content-between align-items-center">
-        <div class="logo">
-          <a href="index.html"
-            ><img src="assets/images/logo/logo.svg" alt="Logo" srcset=""
-          /></a>
+        <div class="logo fs-4">
+          <a href="index.html">Parkir Pintar</a>
         </div>
         <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
           <svg
@@ -92,7 +90,7 @@
 
         <hr>
         <li class="sidebar-item">
-          <a href="{{ route('ticket.finish.form') }}" class="sidebar-link">
+          <a href="{{ route('ticket.finish.form') }}" class="sidebar-link" target="_blank">
             <i class="bi bi-grid-fill"></i>
             <span>Loket Keluar</span>
           </a>
@@ -103,7 +101,7 @@
 
         @foreach ($lockets as $locket)
         <li class="sidebar-item">
-          <a href="{{ route('ticket.createForm', $locket) }}" class="sidebar-link">
+          <a href="{{ route('ticket.createForm', $locket) }}" class="sidebar-link" target="_blank">
             <i class="bi bi-grid-fill"></i>
             <span>{{ $locket->type }}</span>
           </a>

@@ -3,6 +3,12 @@ const webcam = document.getElementById('webcam');
 const canvas = document.getElementById('canvas');
 const photo = document.getElementById('photo');
 const form = document.getElementById('form');
+const imageInput = document.getElementById('image-input');
+
+const width = 320;
+let height = 0;
+let streaming = false;
+let imgData = null;
 
 if (ticket) {
     setTimeout(() => {
@@ -39,9 +45,8 @@ webcam.addEventListener(
     false
 );
 
-form.onsubmit((ev) => {
+form.onsubmit = ((ev) => {
     takepicture();
-    ev.preventDefault();
 })
 
 function takepicture() {
@@ -49,10 +54,15 @@ function takepicture() {
     if (width && height) {
         canvas.width = width;
         canvas.height = height;
-        context.drawImage(video, 0, 0, width, height);
+        context.drawImage(webcam, 0, 0, width, height);
 
-        const data = canvas.toDataURL("image/png");
-        photo.setAttribute("src", data);
+        imgData = canvas.toDataURL("image/png");
+        imgData = imgData.replace(/^data\:image\/\w+\;base64\,/, '');
+
+        console.log(imgData)
+        imageInput.value = imgData;
+        
+        photo.setAttribute("src", imgData);
     } else {
         clearphoto();
     }

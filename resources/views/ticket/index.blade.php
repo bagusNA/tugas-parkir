@@ -96,7 +96,7 @@
                 <a class="nav-link active" id="active-tab" data-bs-toggle="tab" href="#active" role="tab" aria-controls="active" aria-selected="true">Aktif</a>
               </li>
               <li class="nav-item" role="presentation">
-                <a class="nav-link" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false" tabindex="-1">Semua</a>
+                <a class="nav-link" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false" tabindex="-1">Selesai</a>
               </li>
             </ul>
 
@@ -152,11 +152,11 @@
                         <th>Total</th>
                         <th>Jam Masuk</th>
                         <th>Jam Keluar</th>
-                        <th>Aksi</th>
+                        <th>Gambar</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($tickets['all'] as $ticket)
+                      @foreach ($tickets['done'] as $ticket)
                       <tr>
                         <td>{{ $loop->count - $loop->index }}</td>
                         <td class="text-bold-500">{{ $ticket->plate_number }}</td>
@@ -166,7 +166,7 @@
                         <td>{{ $ticket->enter_at }}</td>
                         <td>{{ $ticket->exit_at ?? '-' }}</td>
                         <td class="text-bold-500">
-                          <button class="btn btn-primary">Selesai</button>
+                          <img src="{{ asset("storage/$ticket->image") }}" alt="{{ $ticket->id }}">
                         </td>
                       </tr> 
                       @endforeach

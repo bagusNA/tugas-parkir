@@ -9,21 +9,28 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::latest()->with(['employee', 'rate'])->paginate();
+        $relations = ['employee', 'rate'];
+
+        $doneTickets = 
+            Ticket::where('status', 'Selesai')
+                ->latest()
+                ->with($relations)
+                ->paginate();
         $activeTickets = 
             Ticket::where('status', 'Aktif')
                 ->latest()
-                ->with(['employee', 'rate'])
+                ->with($relations)
                 ->paginate();
 
         return view('ticket.index', [
             'tickets' => [
-                'all' => $tickets,
+                'done' => $doneTickets,
                 'active' => $activeTickets,
             ],
             'rates' => Rate::all()
@@ -39,6 +46,12 @@ class TicketController extends Controller
 
     public function create(Rate $rate, Request $request)
     {
+        $input = $request->validate([
+            'image' => 'required|string'
+        ]);
+
+        // dd($request->all());
+
         $ticket = Ticket::create([
             'employee_id' => Auth::user()->id,
             'rate_id' => $rate->id,
@@ -51,6 +64,11 @@ class TicketController extends Controller
         ]);
 
         $ticket->printTicket($scanCode->code);
+
+        $fileName = "ticket/$ticket->code.png";
+        $ticket->image = $fileName;
+        $ticket->save();
+        Storage::put("public/$fileName", base64_decode($input['image']));
 
         return back()->with('ticket', $ticket->load('scanCode'));
     }

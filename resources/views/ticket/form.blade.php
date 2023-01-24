@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Parkir Pintar</title>
+    <title>Loket Masuk - Parkir Pintar</title>
     <link rel="stylesheet" href="{{ asset('assets/css/main/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/pages/auth.css') }}" />
     <link
@@ -36,6 +36,10 @@
         border-radius: 10px;
         height: 35vh;
       }
+
+      #canvas, #photo {
+        visibility: hidden;
+      }
     </style>
   </head>
 
@@ -44,16 +48,15 @@
       <div class="row h-100">
         <div class="col-lg-5 col-12">
           <div id="auth-left">
-            <div class="auth-logo">
-              <a href="index.html"
-                ><img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo"
-              /></a>
+            <div class="auth-logo fs-1 fw-bold">
+              <a href="index.html">Parkir Pintar</a>
             </div>
             <h1 class="auth-title mb-5">Welcome</h1>
             <h2 class="auth-title fs-1">{{ $rate->type }}</h2>
 
             <form action="{{ route('ticket.create', $rate->id) }}" method="POST" class="d-grid pt-5" id="form">
               @csrf
+              <input type="text" name="image" id="image-input" hidden>
               <button class="btn btn-primary py-5 fs-1">Ambil Tiket</button>
             </form>
           </div>

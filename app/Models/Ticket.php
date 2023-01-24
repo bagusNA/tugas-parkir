@@ -45,7 +45,7 @@ class Ticket extends Model
                 $month = $this->toRoman($date->month);
                 $year = $date->year;
 
-                return "$code/$month/$year";
+                return "$year-$month-$code";
             }
         );
     }
@@ -94,48 +94,73 @@ class Ticket extends Model
         $connector = new CupsPrintConnector(env('CUPS_PRINTER', 'TM-T82-S-A'));
         $print = new Printer($connector);
 
+        $print->initialize();
         $print->selectPrintMode();
-        $print->setTextSize(1,1);
+        $print->setTextSize(2,2);
         $print->text('SMKN 7 SAMARINDA');
+        $print->feed();
+        $print->text('-----------------');
+        $print->feed();
 
+        $print->setTextSize(1,1);
         $print->text("ENTRY: $this->enter_at");
         $print->feed();
 
         $print->text("EXIT: $this->exit_at");
         $print->feed(2);
 
-        $print->setJustification(Printer::JUSTIFY_LEFT);
-        $print->text("PLATE");
-        $print->setJustification(Printer::JUSTIFY_RIGHT);
-        $print->text($this->plate_number);
+        $print->setEmphasis(true);
+
+        $print->text($this->textSpaceBetween(
+            "PLATE",
+            $this->plate_number
+        ));
         $print->feed();
 
-        $print->setJustification(Printer::JUSTIFY_LEFT);
-        $print->text("DURATION");
-        $print->setJustification(Printer::JUSTIFY_RIGHT);
-        $print->text("$this->total_hour JAM");
+        $print->text($this->textSpaceBetween(
+            "DURATION",
+            "$this->total_hour JAM"
+        ));
         $print->feed();
 
-        $print->setJustification(Printer::JUSTIFY_LEFT);
-        $print->text("CASHIER");
-        $print->setJustification(Printer::JUSTIFY_RIGHT);
-        $print->text($cashier->name);
+        $print->text($this->textSpaceBetween(
+            "CASHIER",
+            $cashier->name
+        ));
         $print->feed();
 
-        $print->setJustification(Printer::JUSTIFY_LEFT);
-        $print->text("TOTAL");
-        $print->setJustification(Printer::JUSTIFY_RIGHT);
-        $print->text($this->total_price);
+        $print->text($this->textSpaceBetween(
+            "TOTAL BILL",
+            'Rp. ' . $this->total_price
+        ));
         $print->feed();
 
-        $print->setJustification(Printer::JUSTIFY_LEFT);
-        $print->text("TID");
-        $print->setJustification(Printer::JUSTIFY_RIGHT);
-        $print->text($code->code);
+        $print->text($this->textSpaceBetween(
+            "TOTAL PAID",
+            'Rp. ' . $this->total_paid
+        ));
+        $print->feed();
+
+        $print->text($this->textSpaceBetween(
+            "CHANGE",
+            'Rp. ' . $this->total_paid - $this->total_price
+        ));
+        $print->feed();
+
+        $print->text($this->textSpaceBetween(
+            "TID",
+            $code->code
+        ));
         $print->feed();
 
         $print->cut();
         $print->close();
+    }
+
+    protected function textSpaceBetween($leftStr, $rightStr, $fontSize = 1) { 
+        $maxChar = (int)(42 / $fontSize);
+        $emptySpace = $maxChar - strlen($leftStr) - strlen($rightStr);
+        return str_repeat(' ', $emptySpace); 
     }
 
     protected function toRoman(int $number) {
